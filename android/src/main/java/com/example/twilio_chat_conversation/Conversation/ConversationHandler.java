@@ -283,7 +283,7 @@ public class ConversationHandler {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
+                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
                     // Conversation is already synchronized
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
@@ -291,7 +291,7 @@ public class ConversationHandler {
                     conversation.addListener(new ConversationListener() {
                         @Override
                         public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                            if (status.isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
+                            if (status.isAtLeast(Conversation.SynchronizationStatus.ALL)) {
                                 // Synchronization is complete, fetch messages
                                 fetchMessages(conversation, messageCount, list, result);
                                 // Remove listener to avoid memory leaks
