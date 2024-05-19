@@ -284,110 +284,64 @@ public class ConversationHandler {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                try {
-                    if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
-                        // Conversation is already synchronized
-                        System.out.println("Conversation is already synchronized");
-                        fetchMessages(conversation, messageCount, list, result);
-                    } else {
-                        // Add synchronization listener to wait for synchronization to complete
-                        System.out.println("Adding synchronization listener to wait for synchronization to complete");
-                        conversation.addListener(new ConversationListener() {
-                            @Override
-                            public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                                try {
-                                    if (status.isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
-                                        // Synchronization is complete, fetch messages
-                                        System.out.println("Synchronization completed, fetching messages");
-                                        fetchMessages(conversation, messageCount, list, result);
-                                        // Remove listener to avoid memory leaks
-                                        conversation.removeListener(this);
-                                    }
-                                } catch (Exception e) {
-                                    System.err.println("Error during synchronization: " + e.getMessage());
-                                    result.error("ERROR", "Synchronization error: " + e.getMessage(), null);
-                                }
+                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
+
+                    System.out.print("Conversation is already synchronized");
+                    fetchMessages(conversation, messageCount, list, result);
+                } else {
+                    System.out.print("synchronization listener to wait for synchronization to complete");
+
+                    conversation.addListener(new ConversationListener() {
+                        @Override
+                        public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
+                            if (status.isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
+                                // Synchronization is complete, fetch messages
+                                fetchMessages(conversation, messageCount, list, result);
+                                // Remove listener to avoid memory leaks
+                                conversation.removeListener(this);
                             }
+                        }
 
-                            @Override
-                            public void onError(TwilioException e) {
-                                System.err.println("Listener error: " + e.getMessage());
-                                result.error("ERROR", "Listener error: " + e.getMessage(), null);
-                            }
+                        @Override
+                        public void onError(TwilioException e) {
+                            // Handle errors from the listener if needed
+                            result.error("ERROR", "Synchronization error: " + e.getMessage(), null);
+                        }
 
-                            @Override
-                            public void onMessageAdded(Message message) {}
+                        // Empty implementations for other methods in the listener
+                        @Override
+                        public void onMessageAdded(Message message) {}
 
-                            @Override
-                            public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {}
+                        @Override
+                        public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {}
 
-                            @Override
-                            public void onMessageDeleted(Message message) {}
+                        @Override
+                        public void onMessageDeleted(Message message) {}
 
-                            @Override
-                            public void onParticipantAdded(Participant participant) {}
+                        @Override
+                        public void onParticipantAdded(Participant participant) {}
 
-                            @Override
-                            public void onParticipantUpdated(Participant participant, Participant.UpdateReason updateReason) {}
+                        @Override
+                        public void onParticipantUpdated(Participant participant, Participant.UpdateReason updateReason) {}
 
-                            @Override
-                            public void onParticipantDeleted(Participant participant) {}
+                        @Override
+                        public void onParticipantDeleted(Participant participant) {}
 
-                            @Override
-                            public void onTypingStarted(Conversation conversation, Participant participant) {}
+                        @Override
+                        public void onTypingStarted(Conversation conversation, Participant participant) {}
 
-                            @Override
-                            public void onTypingEnded(Conversation conversation, Participant participant) {}
-                        });
-                    }
-                } catch (Exception e) {
-                    System.err.println("Error in conversation synchronization check: " + e.getMessage());
-                    result.error("ERROR", "Error in conversation synchronization check: " + e.getMessage(), null);
+                        @Override
+                        public void onTypingEnded(Conversation conversation, Participant participant) {}
+                    });
                 }
             }
 
             @Override
             public void onError(ErrorInfo errorInfo) {
-                System.err.println("Error retrieving conversation: " + errorInfo.getMessage());
                 result.error("ERROR", "Error retrieving conversation: " + errorInfo.getMessage(), null);
             }
         });
     }
-
-    private static void fetchMessages(Conversation conversation, Integer messageCount, List<Map<String, Object>> list, MethodChannel.Result result) {
-        try {
-            conversation.getLastMessages((messageCount != null) ? messageCount : 1000, new CallbackListener<List<Message>>() {
-                @Override
-                public void onSuccess(List<Message> messagesList) {
-                    try {
-                        for (Message message : messagesList) {
-                            Map<String, Object> messagesMap = new HashMap<>();
-                            messagesMap.put("sid", message.getSid());
-                            messagesMap.put("author", message.getAuthor());
-                            messagesMap.put("body", message.getBody());
-                            messagesMap.put("attributes", message.getAttributes().toString());
-                            messagesMap.put("dateCreated", message.getDateCreated());
-                            list.add(messagesMap);
-                        }
-                        result.success(list);
-                    } catch (Exception e) {
-                        System.err.println("Error processing messages: " + e.getMessage());
-                        result.error("ERROR", "Error processing messages: " + e.getMessage(), null);
-                    }
-                }
-
-                @Override
-                public void onError(ErrorInfo errorInfo) {
-                    System.err.println("Error retrieving messages: " + errorInfo.getMessage());
-                    result.error("ERROR", "Error retrieving messages: " + errorInfo.getMessage(), null);
-                }
-            });
-        } catch (IllegalStateException e) {
-            System.err.println("Messages are not available at the moment: " + e.getMessage());
-            result.error("ERROR", "Messages are not available at the moment. Synchronize the conversation first.", null);
-        }
-    }
-
 
     private static void fetchMessages(Conversation conversation, Integer messageCount, List<Map<String, Object>> list, MethodChannel.Result result) {
         conversation.getLastMessages((messageCount != null) ? messageCount : 1000, new CallbackListener<List<Message>>() {
