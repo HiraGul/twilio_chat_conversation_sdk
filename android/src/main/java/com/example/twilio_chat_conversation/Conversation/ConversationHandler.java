@@ -291,7 +291,7 @@ public class ConversationHandler {
                     conversation.addListener(new ConversationListener() {
                         @Override
                         public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                            if (status.isAtLeast(Conversation.SynchronizationStatus.ALL)) {
+                            if (status.isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
                                 // Synchronization is complete, fetch messages
                                 fetchMessages(conversation, messageCount, list, result);
                                 // Remove listener to avoid memory leaks
