@@ -283,7 +283,7 @@ public class ConversationHandler {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
+                if (conversation.getSynchronizationStatus() == Conversation.SynchronizationStatus.ALL) {
                     // Conversation is already synchronized
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
@@ -291,7 +291,7 @@ public class ConversationHandler {
                     conversation.addListener(new ConversationListener() {
                         @Override
                         public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                            if (status.isAtLeast(Conversation.SynchronizationStatus.ALL)) {
+                            if (status == Conversation.SynchronizationStatus.ALL) {
                                 // Synchronization is complete, fetch messages
                                 fetchMessages(conversation, messageCount, list, result);
                                 // Remove listener to avoid memory leaks
@@ -340,9 +340,9 @@ public class ConversationHandler {
                         }
 
                         @Override
-                        public void onError(TwilioException e) {
+                        public void onError(ErrorInfo errorInfo) {
                             // Handle errors from the listener if needed
-                            result.error("ERROR", "Synchronization error: " + e.getMessage(), null);
+                            result.error("ERROR", "Synchronization error: " + errorInfo.getMessage(), null);
                         }
                     });
                 }
