@@ -286,16 +286,18 @@ public class ConversationHandler {
                 conversation.getLastMessages((messageCount != null) ? messageCount :1000, new CallbackListener<List<Message>>() {
                     @Override
                     public void onSuccess(List<Message> messagesList) {
-                        for (int i=0; i<messagesList.size(); i++) {
-                            Map<String, Object> messagesMap = new HashMap<>();
-                            messagesMap.put("sid",messagesList.get(i).getSid());
-                            messagesMap.put("author",messagesList.get(i).getAuthor());
-                            messagesMap.put("body",messagesList.get(i).getBody());
-                            messagesMap.put("attributes",messagesList.get(i).getAttributes().toString());
-                            messagesMap.put("dateCreated",messagesList.get(i).getDateCreated());
-                            list.add(messagesMap);
+                        if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
+                            for (int i = 0; i < messagesList.size(); i++) {
+                                Map<String, Object> messagesMap = new HashMap<>();
+                                messagesMap.put("sid", messagesList.get(i).getSid());
+                                messagesMap.put("author", messagesList.get(i).getAuthor());
+                                messagesMap.put("body", messagesList.get(i).getBody());
+                                messagesMap.put("attributes", messagesList.get(i).getAttributes().toString());
+                                messagesMap.put("dateCreated", messagesList.get(i).getDateCreated());
+                                list.add(messagesMap);
+                            }
+                            result.success(list);
                         }
-                        result.success(list);
                     }
                     @Override
                     public void onError(ErrorInfo errorInfo) {
