@@ -101,18 +101,18 @@ public class ConversationHandler {
                 System.out.println("admin-"+conversation.getCreatedBy()+"---"+conversationClient.getMyIdentity());
 
 //                if (conversationClient.getMyIdentity().equals(conversation.getCreatedBy())){
-                    conversation.removeParticipantByIdentity(participantName,new StatusListener() {
-                        @Override
-                        public void onSuccess() {
-                            result.success(Strings.removedParticipantSuccess);
-                        }
+                conversation.removeParticipantByIdentity(participantName,new StatusListener() {
+                    @Override
+                    public void onSuccess() {
+                        result.success(Strings.removedParticipantSuccess);
+                    }
 
-                        @Override
-                        public void onError(ErrorInfo errorInfo) {
-                            StatusListener.super.onError(errorInfo);
-                            result.success(errorInfo.getMessage());
-                        }
-                    });
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        StatusListener.super.onError(errorInfo);
+                        result.success(errorInfo.getMessage());
+                    }
+                });
 //                }
             }
             @Override
@@ -283,7 +283,7 @@ public class ConversationHandler {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                if (conversation.getSynchronizationStatus() == Conversation.SynchronizationStatus.ALL) {
+                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
                     // Conversation is already synchronized
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
@@ -291,7 +291,7 @@ public class ConversationHandler {
                     conversation.addListener(new ConversationListener() {
                         @Override
                         public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                            if (status == Conversation.SynchronizationStatus.ALL) {
+                            if (status.isAtLeast(Conversation.SynchronizationStatus.ALL)) {
                                 // Synchronization is complete, fetch messages
                                 fetchMessages(conversation, messageCount, list, result);
                                 // Remove listener to avoid memory leaks
@@ -300,50 +300,35 @@ public class ConversationHandler {
                         }
 
                         @Override
-                        public void onMessageAdded(Message message) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onMessageDeleted(Message message) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onParticipantAdded(Participant participant) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onParticipantUpdated(Participant participant, Participant.UpdateReason updateReason) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onParticipantDeleted(Participant participant) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onTypingStarted(Conversation conversation, Participant participant) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onTypingEnded(Conversation conversation, Participant participant) {
-                            // Implement other listener methods as needed
-                        }
-
-                        @Override
-                        public void onError(ErrorInfo errorInfo) {
+                        public void onError(TwilioException e) {
                             // Handle errors from the listener if needed
-                            result.error("ERROR", "Synchronization error: " + errorInfo.getMessage(), null);
+                            result.error("ERROR", "Synchronization error: " + e.getMessage(), null);
                         }
+
+                        // Empty implementations for other methods in the listener
+                        @Override
+                        public void onMessageAdded(Message message) {}
+
+                        @Override
+                        public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {}
+
+                        @Override
+                        public void onMessageDeleted(Message message) {}
+
+                        @Override
+                        public void onParticipantAdded(Participant participant) {}
+
+                        @Override
+                        public void onParticipantUpdated(Participant participant, Participant.UpdateReason updateReason) {}
+
+                        @Override
+                        public void onParticipantDeleted(Participant participant) {}
+
+                        @Override
+                        public void onTypingStarted(Conversation conversation, Participant participant) {}
+
+                        @Override
+                        public void onTypingEnded(Conversation conversation, Participant participant) {}
                     });
                 }
             }
@@ -377,7 +362,6 @@ public class ConversationHandler {
             }
         });
     }
-
 
     public static void initializeConversationClient(String accessToken, MethodChannel.Result result) {
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().createProperties();
