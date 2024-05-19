@@ -283,7 +283,7 @@ public class ConversationHandler {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
+                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
                     // Conversation is already synchronized
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
