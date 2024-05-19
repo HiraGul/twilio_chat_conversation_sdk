@@ -101,18 +101,18 @@ public class ConversationHandler {
                 System.out.println("admin-"+conversation.getCreatedBy()+"---"+conversationClient.getMyIdentity());
 
 //                if (conversationClient.getMyIdentity().equals(conversation.getCreatedBy())){
-                    conversation.removeParticipantByIdentity(participantName,new StatusListener() {
-                        @Override
-                        public void onSuccess() {
-                            result.success(Strings.removedParticipantSuccess);
-                        }
+                conversation.removeParticipantByIdentity(participantName,new StatusListener() {
+                    @Override
+                    public void onSuccess() {
+                        result.success(Strings.removedParticipantSuccess);
+                    }
 
-                        @Override
-                        public void onError(ErrorInfo errorInfo) {
-                            StatusListener.super.onError(errorInfo);
-                            result.success(errorInfo.getMessage());
-                        }
-                    });
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        StatusListener.super.onError(errorInfo);
+                        result.success(errorInfo.getMessage());
+                    }
+                });
 //                }
             }
             @Override
@@ -280,89 +280,36 @@ public class ConversationHandler {
     /// Get messages from the specific conversation #
     public static void getAllMessages(String conversationId, Integer messageCount, MethodChannel.Result result) {
         List<Map<String, Object>> list = new ArrayList<>();
-        conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
+        conversationClient.getConversation(conversationId,new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.ALL)) {
-                    // Conversation is already synchronized
-                    fetchMessages(conversation, messageCount, list, result);
-                } else {
-                    // Add synchronization listener to wait for synchronization to complete
-                    conversation.addListener(new ConversationListener() {
-                        @Override
-                        public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
-                            if (status.isAtLeast(Conversation.SynchronizationStatus.ALL)) {
-                                // Synchronization is complete, fetch messages
-                                fetchMessages(conversation, messageCount, list, result);
-                                // Remove listener to avoid memory leaks
-                                conversation.removeListener(this);
-                            }
+                conversation.getLastMessages((messageCount != null) ? messageCount :1000, new CallbackListener<List<Message>>() {
+                    @Override
+                    public void onSuccess(List<Message> messagesList) {
+                        for (int i=0; i<messagesList.size(); i++) {
+                            Map<String, Object> messagesMap = new HashMap<>();
+                            messagesMap.put("sid",messagesList.get(i).getSid());
+                            messagesMap.put("author",messagesList.get(i).getAuthor());
+                            messagesMap.put("body",messagesList.get(i).getBody());
+                            messagesMap.put("attributes",messagesList.get(i).getAttributes().toString());
+                            messagesMap.put("dateCreated",messagesList.get(i).getDateCreated());
+                            list.add(messagesMap);
                         }
-
-                        @Override
-                        public void onError(TwilioException e) {
-                            // Handle errors from the listener if needed
-                            result.error("ERROR", "Synchronization error: " + e.getMessage(), null);
-                        }
-
-                        // Empty implementations for other methods in the listener
-                        @Override
-                        public void onMessageAdded(Message message) {}
-
-                        @Override
-                        public void onMessageUpdated(Message message, Message.UpdateReason updateReason) {}
-
-                        @Override
-                        public void onMessageDeleted(Message message) {}
-
-                        @Override
-                        public void onParticipantAdded(Participant participant) {}
-
-                        @Override
-                        public void onParticipantUpdated(Participant participant, Participant.UpdateReason updateReason) {}
-
-                        @Override
-                        public void onParticipantDeleted(Participant participant) {}
-
-                        @Override
-                        public void onTypingStarted(Conversation conversation, Participant participant) {}
-
-                        @Override
-                        public void onTypingEnded(Conversation conversation, Participant participant) {}
-                    });
-                }
+                        result.success(list);
+                    }
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        /// Error occurred while retrieving the messages
+                        //System.out.println("Error retrieving messages: " + errorInfo.getMessage());
+                    }
+                });
             }
-
             @Override
             public void onError(ErrorInfo errorInfo) {
-                result.error("ERROR", "Error retrieving conversation: " + errorInfo.getMessage(), null);
+                CallbackListener.super.onError(errorInfo);
             }
         });
     }
-
-    private static void fetchMessages(Conversation conversation, Integer messageCount, List<Map<String, Object>> list, MethodChannel.Result result) {
-        conversation.getLastMessages((messageCount != null) ? messageCount : 1000, new CallbackListener<List<Message>>() {
-            @Override
-            public void onSuccess(List<Message> messagesList) {
-                for (Message message : messagesList) {
-                    Map<String, Object> messagesMap = new HashMap<>();
-                    messagesMap.put("sid", message.getSid());
-                    messagesMap.put("author", message.getAuthor());
-                    messagesMap.put("body", message.getBody());
-                    messagesMap.put("attributes", message.getAttributes().toString());
-                    messagesMap.put("dateCreated", message.getDateCreated());
-                    list.add(messagesMap);
-                }
-                result.success(list);
-            }
-
-            @Override
-            public void onError(ErrorInfo errorInfo) {
-                result.error("ERROR", "Error retrieving messages: " + errorInfo.getMessage(), null);
-            }
-        });
-    }
-
     public static void initializeConversationClient(String accessToken, MethodChannel.Result result) {
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().createProperties();
         ConversationsClient.create(flutterPluginBinding.getApplicationContext(), accessToken, props, new CallbackListener<ConversationsClient>() {
