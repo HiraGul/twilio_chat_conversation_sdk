@@ -284,10 +284,12 @@ public class ConversationHandler {
             @Override
             public void onSuccess(Conversation conversation) {
                 if (conversation.getSynchronizationStatus().isAtLeast(Conversation.SynchronizationStatus.COMPLETED)) {
-                    // Conversation is already synchronized
+
+                    System.out.print("Conversation is already synchronized");
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
-                    // Add synchronization listener to wait for synchronization to complete
+                    System.out.print("dd synchronization listener to wait for synchronization to complete");
+
                     conversation.addListener(new ConversationListener() {
                         @Override
                         public void onSynchronizationChanged(Conversation.SynchronizationStatus status) {
