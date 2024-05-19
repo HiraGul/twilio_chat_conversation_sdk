@@ -280,6 +280,7 @@ public class ConversationHandler {
     /// Get messages from the specific conversation #
     public static void getAllMessages(String conversationId, Integer messageCount, MethodChannel.Result result) {
         List<Map<String, Object>> list = new ArrayList<>();
+        System.out.println("Conversation being synchronized");
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
@@ -288,7 +289,7 @@ public class ConversationHandler {
                     System.out.print("Conversation is already synchronized");
                     fetchMessages(conversation, messageCount, list, result);
                 } else {
-                    System.out.print("dd synchronization listener to wait for synchronization to complete");
+                    System.out.print("synchronization listener to wait for synchronization to complete");
 
                     conversation.addListener(new ConversationListener() {
                         @Override
