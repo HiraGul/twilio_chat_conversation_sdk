@@ -293,6 +293,13 @@ public class ConversationHandler {
                             messagesMap.put("body",messagesList.get(i).getBody());
                             messagesMap.put("attributes",messagesList.get(i).getAttributes().toString());
                             messagesMap.put("dateCreated",messagesList.get(i).getDateCreated());
+                            messagesMap.put("index", i); // Message index/position
+                            messagesMap.put("status", message.getStatus()); // Message status
+                            messagesMap.put("mediaUrl", message.getMediaUrl()); // Media URL (if any)
+                            messagesMap.put("mediaType", message.getMediaType()); // Media type (if any)
+                            messagesMap.put("reactions", message.getReactions()); // Reactions to the message
+                            messagesMap.put("type", message.getType()); // Message type
+                            messagesMap.put("isRead", message.isRead()); // Read status
                             list.add(messagesMap);
                         }
                         result.success(list);
