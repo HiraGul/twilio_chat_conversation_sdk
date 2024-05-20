@@ -293,7 +293,7 @@ public class ConversationHandler {
                             messagesMap.put("body",messagesList.get(i).getBody());
                             messagesMap.put("attributes",messagesList.get(i).getAttributes().toString());
                             messagesMap.put("dateCreated",messagesList.get(i).getDateCreated());
-                            messagesMap.put("participantId",messagesList.get(i).getParticipantSid());
+                            messagesMap.put("delivery",messagesList.get(i).getAggregatedDeliveryReceipt());
 
                             list.add(messagesMap);
                         }
