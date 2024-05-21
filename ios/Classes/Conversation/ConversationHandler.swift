@@ -226,8 +226,19 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
         dictionary["description"] = message.description
         dictionary["index"] = message.index
         dictionary["attachedMedia"] = attachedMedia
-        dictionary["delivery"] = message.aggregatedDeliveryReceipt
+       if let deliveryReceipt = message.aggregatedDeliveryReceipt {
+              var deliveryReceiptDict: [String: Any] = [:]
+              deliveryReceiptDict["total"] = deliveryReceipt.total
+              deliveryReceiptDict["sent"] = deliveryReceipt.sent
+              deliveryReceiptDict["delivered"] = deliveryReceipt.delivered
+              deliveryReceiptDict["read"] = deliveryReceipt.read
+              deliveryReceiptDict["failed"] = deliveryReceipt.failed
+              deliveryReceiptDict["undelivered"] = deliveryReceipt.undelivered
 
-        completion(dictionary)
+              dictionary["delivery"] = deliveryReceiptDict
+          } else {
+              dictionary["delivery"] = nil
+          }
+           completion(dictionary)
     }
 }
