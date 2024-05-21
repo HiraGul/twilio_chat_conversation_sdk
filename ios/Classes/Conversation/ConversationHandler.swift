@@ -226,7 +226,7 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
         dictionary["description"] = message.description
         dictionary["index"] = message.index
         dictionary["attachedMedia"] = attachedMedia
-        dictionary["delivery"] = message.delivery
+        dictionary["delivery"] = message.aggregatedDeliveryReceipt
 
         completion(dictionary)
     }
