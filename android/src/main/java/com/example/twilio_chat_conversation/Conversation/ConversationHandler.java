@@ -232,15 +232,7 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
-                        try {
-                            Map<String, Object> typingEnd = new HashMap<>();
-                            typingMap.put("conversationSid", conversation.getSid());
-                            typingMap.put("participantSid", participant.getSid());
-                            typingMap.put("participantIdentity", participant.getIdentity());
-                            triggerEvent(typingEnd);
-                        } catch (Exception e) {
-                            // Handle exception
-                        }
+
                     }
 
                     @Override
