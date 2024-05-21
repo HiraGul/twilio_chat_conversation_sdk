@@ -224,7 +224,7 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
         dictionary["participant"] = message.participant?.identity
         dictionary["participantSid"] = message.participantSid
         dictionary["description"] = message.description
-         dictionary["index"] = "index is mine"
+         dictionary["index"] = message.index,
         dictionary["attachedMedia"] = attachedMedia
        if let deliveryReceipt = message.aggregatedDeliveryReceipt {
               var deliveryReceiptDict: [String: Any] = [:]
@@ -237,7 +237,7 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
 
               dictionary["delivery"] = deliveryReceiptDict
           } else {
-              dictionary["delivery"] = "INNNNNNNNNNNN"
+              dictionary["delivery"] = "null"
           }
            completion(dictionary)
     }
