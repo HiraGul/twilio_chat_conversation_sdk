@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
+
 import 'twilio_chat_conversation_platform_interface.dart';
 
 /// A class for managing Twilio Chat conversations and communication.
@@ -13,16 +15,24 @@ class TwilioChatConversation {
       EventChannel('twilio_chat_conversation/onMessageUpdated');
   static const EventChannel _tokenEventChannel =
       EventChannel('twilio_chat_conversation/onTokenStatusChange');
+  static const EventChannel _typingStartedEventChannel =
+      EventChannel('twilio_chat_conversation/onTypingStarted');
+  static const EventChannel _typingEndedEventChannel =
+      EventChannel('twilio_chat_conversation/onTypingEnded');
 
-  // Stream controllers for message updates and token status changes.
   static final StreamController<Map> _messageUpdateController =
       StreamController<Map>.broadcast();
   static final StreamController<Map> _tokenStatusController =
       StreamController<Map>.broadcast();
+  static final StreamController<Map> _typingStartedController =
+      StreamController<Map>.broadcast();
+  static final StreamController<Map> _typingEndedController =
+      StreamController<Map>.broadcast();
 
   /// Stream for receiving incoming messages.
   Stream<Map> get onMessageReceived => _messageUpdateController.stream;
-
+  Stream<Map> get onTypingStarted => _typingStartedController.stream;
+  Stream<Map> get onTypingEnded => _typingEndedController.stream;
   Future<String?> getPlatformVersion() {
     return TwilioChatConversationPlatform.instance.getPlatformVersion();
   }
@@ -192,5 +202,32 @@ class TwilioChatConversation {
       _tokenStatusController.add(tokenStatus);
     });
     return _tokenStatusController.stream;
+  }
+
+  void subscribeToTypingEvents({required String conversationSid}) async {
+    _typingStartedEventChannel
+        .receiveBroadcastStream(conversationSid)
+        .listen((dynamic typingInfo) {
+      if (typingInfo != null) {
+        _typingStartedController.add(typingInfo);
+      }
+    });
+
+    _typingEndedEventChannel
+        .receiveBroadcastStream(conversationSid)
+        .listen((dynamic typingInfo) {
+      if (typingInfo != null) {
+        _typingEndedController.add(typingInfo);
+      }
+    });
+  }
+
+  void unsubscribeFromTypingEvents({required String conversationSid}) {
+    _typingStartedController.close();
+    _typingEndedController.close();
+    TwilioChatConversationPlatform.instance
+        .unSubscribeToTypingStarted(conversationId: conversationSid);
+    TwilioChatConversationPlatform.instance
+        .unSubscribeToTypingEnded(conversationId: conversationSid);
   }
 }

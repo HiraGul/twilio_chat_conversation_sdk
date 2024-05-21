@@ -1,4 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
 import 'twilio_chat_conversation_method_channel.dart';
 
 abstract class TwilioChatConversationPlatform extends PlatformInterface {
@@ -91,5 +92,26 @@ abstract class TwilioChatConversationPlatform extends PlatformInterface {
   Future<String?> removeParticipant(
       {required conversationId, required participantName}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  // Add the typing events subscription methods.
+  Future<String?> subscribeToTypingStarted({required String conversationId}) {
+    throw UnimplementedError(
+        'subscribeToTypingStarted() has not been implemented.');
+  }
+
+  Future<String?> unSubscribeToTypingStarted({required String conversationId}) {
+    throw UnimplementedError(
+        'unSubscribeToTypingStarted() has not been implemented.');
+  }
+
+  Future<String?> subscribeToTypingEnded({required String conversationId}) {
+    throw UnimplementedError(
+        'subscribeToTypingEnded() has not been implemented.');
+  }
+
+  Future<String?> unSubscribeToTypingEnded({required String conversationId}) {
+    throw UnimplementedError(
+        'unSubscribeToTypingEnded() has not been implemented.');
   }
 }
