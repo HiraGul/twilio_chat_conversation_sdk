@@ -221,10 +221,10 @@ public class ConversationHandler {
                     public void onTypingStarted(Conversation conversation, Participant participant) {
                         try {
                             Map<String, Object> typingStarted = new HashMap<>();
-                            typingMap.put("conversationSid", conversation.getSid());
-                            typingMap.put("participantSid", participant.getSid());
-                            typingMap.put("participantIdentity", participant.getIdentity());
-                            triggerEvent(typingStarted);
+                            typingStarted.put("conversationSid", conversation.getSid());
+                            typingStarted.put("participantSid", participant.getSid());
+                            typingStarted.put("participantIdentity", participant.getIdentity());
+                            triggerTypingEvent(typingStarted);
                         } catch (Exception e) {
                             // Handle exception
                         }
@@ -232,8 +232,16 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
-
-                    }
+                        try {
+                            Map<String, Object> typingEnded = new HashMap<>();
+                            typingEnded.put("conversationSid", conversation.getSid());
+                            typingEnded.put("participantSid", participant.getSid());
+                            typingEnded.put("participantIdentity", participant.getIdentity());
+                            triggerTypingEvent(typingEnded);
+                        } catch (Exception e) {
+                            // Handle exception
+                        }
+                    }s
 
                     @Override
                     public void onSynchronizationChanged(Conversation conversation) {
@@ -501,6 +509,11 @@ public class ConversationHandler {
         //System.out.println("accessTokenInterface->" + accessTokenInterface.toString());
         if (accessTokenInterface != null) {
             accessTokenInterface.onTokenStatusChange(status);
+        }
+    }
+    public static void triggerTypingEvent(Map<String, Object> typingEvent) {
+        if (messageInterface != null) {
+            messageInterface.onTypingUpdate(typingEvent);
         }
     }
 }
