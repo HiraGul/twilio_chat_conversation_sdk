@@ -241,7 +241,7 @@ public class ConversationHandler {
                         } catch (Exception e) {
                             // Handle exception
                         }
-                    }s
+                    }
 
                     @Override
                     public void onSynchronizationChanged(Conversation conversation) {
