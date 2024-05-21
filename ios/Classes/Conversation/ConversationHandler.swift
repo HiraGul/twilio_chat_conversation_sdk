@@ -224,7 +224,7 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
         dictionary["participant"] = message.participant?.identity
         dictionary["participantSid"] = message.participantSid
         dictionary["description"] = message.description
-        dictionary["index"] = message.aggregatedDeliveryReceipt
+        dictionary["index"] = message.index
         dictionary["attachedMedia"] = attachedMedia
         dictionary["delivery"] = message.aggregatedDeliveryReceipt
 
