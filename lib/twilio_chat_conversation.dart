@@ -184,7 +184,7 @@ class TwilioChatConversation {
     _typingEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic event) {
-      print("TYPING EVENT");
+      print("TYPING EVENT $event");
       if (event != null) {
         if (event["participantSid"] != null &&
             event["participantIdentity"] != null) {
