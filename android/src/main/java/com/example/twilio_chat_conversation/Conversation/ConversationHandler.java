@@ -173,10 +173,10 @@ public class ConversationHandler {
     /// Subscribe To Message Update #
     public static void subscribeToMessageUpdate(String conversationId){
         conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
-             System.out.println("Message Listener Result");
+
             @Override
             public void onSuccess(Conversation result) {
-                System.out.println("Message Listener success");
+
                 // Join the conversation with the given participant identity
                 result.addListener(new ConversationListener() {
                     @Override
@@ -223,7 +223,7 @@ public class ConversationHandler {
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
                         try {
-                            System.out.println("Typing Listener Result");
+
                             Map<String, Object> typingStarted = new HashMap<>();
                             typingStarted.put("conversationSid", conversation.getSid());
                             typingStarted.put("participantSid", participant.getSid());
