@@ -173,8 +173,10 @@ public class ConversationHandler {
     /// Subscribe To Message Update #
     public static void subscribeToMessageUpdate(String conversationId){
         conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
+             System.out.println("Message Listener Result");
             @Override
             public void onSuccess(Conversation result) {
+                System.out.println("Message Listener success");
                 // Join the conversation with the given participant identity
                 result.addListener(new ConversationListener() {
                     @Override
@@ -292,7 +294,7 @@ public class ConversationHandler {
                 list.add(conversationMap);
             }
         }
-        //System.out.println("list"+list);
+
         return  list;
     }
     /// Get messages from the specific conversation #
