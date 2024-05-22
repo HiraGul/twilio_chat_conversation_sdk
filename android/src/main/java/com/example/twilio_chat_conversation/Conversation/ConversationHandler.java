@@ -182,7 +182,6 @@ public class ConversationHandler {
                     @Override
                     public void onMessageAdded(Message message) {
                         try {
-                            System.out.println("Message added");
                             Map<String, Object> messageMap = new HashMap<>();
                             messageMap.put("sid",message.getSid());
                             messageMap.put("author",message.getAuthor());
