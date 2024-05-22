@@ -170,9 +170,11 @@ class TwilioChatConversation {
   void subscribeToMessageUpdate({required String conversationSid}) async {
     TwilioChatConversationPlatform.instance
         .subscribeToMessageUpdate(conversationId: conversationSid);
+    print("LISTENER SUBSCRIBE MESSAGE UPDATE");
     _messageEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
+      print("MESSAGE EVENT");
       if (message != null) {
         if (message["author"] != null && message["body"] != null) {
           _messageUpdateController.add(message);
@@ -182,6 +184,7 @@ class TwilioChatConversation {
     _typingEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic event) {
+      print("TYPING EVENT");
       if (event != null) {
         if (event["participantSid"] != null &&
             event["participantIdentity"] != null) {
