@@ -93,25 +93,4 @@ abstract class TwilioChatConversationPlatform extends PlatformInterface {
       {required conversationId, required participantName}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
-
-  // Add the typing events subscription methods.
-  Future<String?> subscribeToTypingStarted({required String conversationId}) {
-    throw UnimplementedError(
-        'subscribeToTypingStarted() has not been implemented.');
-  }
-
-  Future<String?> unSubscribeToTypingStarted({required String conversationId}) {
-    throw UnimplementedError(
-        'unSubscribeToTypingStarted() has not been implemented.');
-  }
-
-  Future<String?> subscribeToTypingEnded({required String conversationId}) {
-    throw UnimplementedError(
-        'subscribeToTypingEnded() has not been implemented.');
-  }
-
-  Future<String?> unSubscribeToTypingEnded({required String conversationId}) {
-    throw UnimplementedError(
-        'unSubscribeToTypingEnded() has not been implemented.');
-  }
 }

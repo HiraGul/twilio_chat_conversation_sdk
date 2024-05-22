@@ -237,7 +237,7 @@ public class ConversationHandler {
                             typingEnded.put("conversationSid", conversation.getSid());
                             typingEnded.put("participantSid", participant.getSid());
                             typingEnded.put("participantIdentity", participant.getIdentity());
-                            triggerTypingEvent(typingEnded);
+
                         } catch (Exception e) {
                             // Handle exception
                         }
