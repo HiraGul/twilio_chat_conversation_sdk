@@ -26,10 +26,9 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   private MethodChannel channel;
   private EventChannel eventChannel;
   private EventChannel tokenEventChannel;
-  private EventChannel.EventSink typingEventChannel;
+  private EventChannel typingEventChannel;
   private EventChannel.EventSink eventSink;
   private EventChannel.EventSink tokenEventSink;
-
   private EventChannel.EventSink typingEventSink;
 
   @Override
@@ -123,6 +122,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   public void onListen(Object arguments, EventSink events) {
     this.eventSink = events;
     this.tokenEventSink = events;
+    this.typingEventSink=eventss;
     ConversationHandler conversationHandler = new ConversationHandler();
     conversationHandler.setListener(this);
     conversationHandler.setTokenListener(this);
