@@ -182,6 +182,7 @@ public class ConversationHandler {
                     @Override
                     public void onMessageAdded(Message message) {
                         try {
+                            System.out.println("Message added");
                             Map<String, Object> messageMap = new HashMap<>();
                             messageMap.put("sid",message.getSid());
                             messageMap.put("author",message.getAuthor());
@@ -222,6 +223,7 @@ public class ConversationHandler {
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
                         try {
+                            System.out.println("Typing Listener Result");
                             Map<String, Object> typingStarted = new HashMap<>();
                             typingStarted.put("conversationSid", conversation.getSid());
                             typingStarted.put("participantSid", participant.getSid());
