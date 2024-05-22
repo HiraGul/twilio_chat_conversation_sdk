@@ -122,7 +122,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   public void onListen(Object arguments, EventSink events) {
     this.eventSink = events;
     this.tokenEventSink = events;
-    this.typingEventSink=eventss;
+    this.typingEventSink=events;
     ConversationHandler conversationHandler = new ConversationHandler();
     conversationHandler.setListener(this);
     conversationHandler.setTokenListener(this);
