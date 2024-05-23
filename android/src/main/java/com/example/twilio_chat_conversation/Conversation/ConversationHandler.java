@@ -2,6 +2,7 @@ package com.example.twilio_chat_conversation.Conversation;
 
 import com.example.twilio_chat_conversation.Interface.AccessTokenInterface;
 import com.example.twilio_chat_conversation.Interface.MessageInterface;
+import com.example.twilio_chat_conversation.Interface.TypingInterface;
 import com.example.twilio_chat_conversation.Utility.Strings;
 import com.twilio.conversations.Attributes;
 import com.twilio.conversations.CallbackListener;
@@ -31,7 +32,7 @@ public class ConversationHandler {
     public static FlutterPlugin.FlutterPluginBinding flutterPluginBinding;
     private static MessageInterface messageInterface;
     private static AccessTokenInterface accessTokenInterface;
-    private  static TypingInterface typingInterface;
+    private static TypingInterface typingInterface;
 
     /// Generate token and authenticate user #
     public static String generateAccessToken(String accountSid, String apiKey, String apiSecret, String identity, String serviceSid) {
