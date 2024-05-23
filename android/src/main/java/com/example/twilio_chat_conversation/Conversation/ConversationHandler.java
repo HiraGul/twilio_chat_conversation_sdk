@@ -31,6 +31,7 @@ public class ConversationHandler {
     public static FlutterPlugin.FlutterPluginBinding flutterPluginBinding;
     private static MessageInterface messageInterface;
     private static AccessTokenInterface accessTokenInterface;
+    private  static TypingInterface typingInterface;
 
     /// Generate token and authenticate user #
     public static String generateAccessToken(String accountSid, String apiKey, String apiSecret, String identity, String serviceSid) {
@@ -221,29 +222,12 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
-                        try {
 
-                            Map<String, Object> typingStarted = new HashMap<>();
-                            typingStarted.put("conversationSid", conversation.getSid());
-                            typingStarted.put("participantSid", participant.getSid());
-                            typingStarted.put("participantIdentity", participant.getIdentity());
-                            triggerTypingEvent(typingStarted);
-                        } catch (Exception e) {
-                            // Handle exception
-                        }
                     }
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
-                        try {
-                            Map<String, Object> typingEnded = new HashMap<>();
-                            typingEnded.put("conversationSid", conversation.getSid());
-                            typingEnded.put("participantSid", participant.getSid());
-                            typingEnded.put("participantIdentity", participant.getIdentity());
 
-                        } catch (Exception e) {
-                            // Handle exception
-                        }
                     }
 
                     @Override
@@ -495,12 +479,111 @@ public class ConversationHandler {
         });
     }
 
+    public static void subscribeToTypingUpdate(String conversationId){
+        conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
+
+            @Override
+            public void onSuccess(Conversation result) {
+
+                // Join the conversation with the given participant identity
+                result.addListener(new ConversationListener() {
+                    @Override
+                    public void onMessageAdded(Message message) {
+
+                    }
+
+                    @Override
+                    public void onMessageUpdated(Message message, Message.UpdateReason reason) {
+
+                    }
+
+                    @Override
+                    public void onMessageDeleted(Message message) {
+                        //System.out.println("onMessageDeleted->"+message.toString());
+                    }
+
+                    @Override
+                    public void onParticipantAdded(Participant participant) {
+                    }
+
+                    @Override
+                    public void onParticipantUpdated(Participant participant, Participant.UpdateReason reason) {
+                    }
+
+
+                    @Override
+                    public void onParticipantDeleted(Participant participant) {
+                    }
+
+                    @Override
+                    public void onTypingStarted(Conversation conversation, Participant participant) {
+                        try {
+
+                            Map<String, Object> typingStarted = new HashMap<>();
+                            typingStarted.put("conversationSid", conversation.getSid());
+                            typingStarted.put("participantSid", participant.getSid());
+                            typingStarted.put("participantIdentity", participant.getIdentity());
+                            triggerTypingEvent(typingStarted);
+                        } catch (Exception e) {
+                            // Handle exception
+                        }
+                    }
+
+                    @Override
+                    public void onTypingEnded(Conversation conversation, Participant participant) {
+                        try {
+                            Map<String, Object> typingEnded = new HashMap<>();
+                            typingEnded.put("conversationSid", conversation.getSid());
+                            typingEnded.put("participantSid", participant.getSid());
+                            typingEnded.put("participantIdentity", participant.getIdentity());
+
+                        } catch (Exception e) {
+                            // Handle exception
+                        }
+                    }
+
+                    @Override
+                    public void onSynchronizationChanged(Conversation conversation) {
+                        System.out.println("conversation onSynchronizationChanged->"+conversation.getSynchronizationStatus().toString());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                //System.out.println("client12-" + errorInfo.getStatus()+"-"+errorInfo.getCode()+"-"+errorInfo.getMessage()+"-"+errorInfo.getDescription()+"-"+errorInfo.getReason());
+
+                CallbackListener.super.onError(errorInfo);
+            }
+        });
+    }
+    /// Unsubscribe To Message Update #
+    public static void unSubscribeToTypingUpdate(String conversationId){
+        conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
+            @Override
+            public void onSuccess(Conversation result) {
+                /// Retrieve the conversation object using the conversation SID
+                result.removeAllListeners();
+            }
+
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                //System.out.println("client12-" + errorInfo.getStatus()+"-"+errorInfo.getCode()+"-"+errorInfo.getMessage()+"-"+errorInfo.getDescription()+"-"+errorInfo.getReason());
+                CallbackListener.super.onError(errorInfo);
+            }
+        });
+    }
+
     public void setListener(MessageInterface listener) {
         ConversationHandler.messageInterface = listener;
     }
     public void setTokenListener(AccessTokenInterface listener) {
         ConversationHandler.accessTokenInterface = listener;
     }
+    public void setTypingListener(TypingInterface listener) {
+        ConversationHandler.typingInterface = listener;
+    }
+
     public static void triggerEvent(Map message) {
         // Pass the result through the messageInterface
         if (messageInterface != null) {
@@ -515,8 +598,8 @@ public class ConversationHandler {
         }
     }
     public static void triggerTypingEvent(Map<String, Object> typingEvent) {
-        if (messageInterface != null) {
-            messageInterface.onTypingUpdate(typingEvent);
+        if (typingInterface != null) {
+            typingInterface.onTypingUpdate(typingEvent);
         }
     }
 }

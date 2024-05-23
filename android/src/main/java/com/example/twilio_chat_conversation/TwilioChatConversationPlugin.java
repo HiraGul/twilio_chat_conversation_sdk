@@ -104,6 +104,10 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
         break;
       case Methods.updateAccessToken:
         ConversationHandler.updateAccessToken(call.argument("accessToken"),result);
+      case Methods.subscribeToTypingUpdate:
+        ConversationHandler.subscribeToTypingUpdate(call.argument("conversationId"),result);
+      case Methods.unSubscribeToMessageUpdate:
+        ConversationHandler.subscribeToTypingUpdate(call.argument("conversationId"),result);
         break;
       default:
         break;
