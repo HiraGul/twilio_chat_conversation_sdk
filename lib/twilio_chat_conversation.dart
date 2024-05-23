@@ -172,24 +172,26 @@ class TwilioChatConversation {
     _messageEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
-          print('contr 1');
+      print('contr 1');
       print("adding data to above");
+      print(message);
       if (message != null) {
         if (message["author"] != null && message["body"] != null) {
           _messageUpdateController.add(message);
         }
       }
-      print(_messageUpdateController);
+      print(_messageUpdateController.stream);
     });
     _typingEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
-      print("adding data to above");
+      print("adding data to below");
+      print(message);
       if (message != null) {
         _typingStartedController.add(message);
       }
       print('cont 2');
-      print(_messageUpdateController);
+      print(_messageUpdateController.stream);
     });
   }
 
