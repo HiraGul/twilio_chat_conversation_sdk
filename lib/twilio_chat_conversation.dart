@@ -171,11 +171,17 @@ class TwilioChatConversation {
     _messageEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
-      print("MESSAGE EVENT");
       if (message != null) {
         if (message["author"] != null && message["body"] != null) {
           _messageUpdateController.add(message);
         }
+      }
+    });
+    _typingEventChannel
+        .receiveBroadcastStream(conversationSid)
+        .listen((dynamic message) {
+      if (message != null) {
+        _messageUpdateController.add(message);
       }
     });
   }
@@ -190,28 +196,6 @@ class TwilioChatConversation {
   Future<Map?> updateAccessToken({required String accessToken}) {
     return TwilioChatConversationPlatform.instance
         .updateAccessToken(accessToken: accessToken);
-  }
-
-  /// Subscribes to message update events for a specific conversation.
-  void subscribeToTypingUpdate({required String conversationSid}) async {
-    TwilioChatConversationPlatform.instance
-        .subscribeToTypingUpdate(conversationId: conversationSid);
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      if (event != null) {
-        if (event["participantSid"] != null &&
-            event["participantIdentity"] != null) {
-          _typingStartedController.add(event);
-        }
-      }
-    });
-  }
-
-  /// Unsubscribes from message update events for a specific conversation.
-  void unSubscribeToTypingUpdate({required String conversationSid}) {
-    TwilioChatConversationPlatform.instance
-        .unSubscribeToTypingUpdate(conversationId: conversationSid);
   }
 
   /// Stream for receiving token status changes.
