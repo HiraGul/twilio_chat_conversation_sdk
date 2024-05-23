@@ -182,17 +182,17 @@ class TwilioChatConversation {
       }
       print(_messageUpdateController.stream);
     });
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic message) {
-      print("adding data to below");
-      print(message);
-      if (message != null) {
-        _typingStartedController.add(message);
-      }
-      print('cont 2');
-      print(_messageUpdateController.stream);
-    });
+    // _typingEventChannel
+    //     .receiveBroadcastStream(conversationSid)
+    //     .listen((dynamic message) {
+    //   print("adding data to below");
+    //   print(message);
+    //   if (message != null) {
+    //     _typingStartedController.add(message);
+    //   }
+    //   print('cont 2');
+    //   print(_messageUpdateController.stream);
+    // });
   }
 
   /// Unsubscribes from message update events for a specific conversation.
