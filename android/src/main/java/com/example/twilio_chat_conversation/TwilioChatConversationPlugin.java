@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.example.twilio_chat_conversation.Conversation.ConversationHandler;
 import com.example.twilio_chat_conversation.Interface.AccessTokenInterface;
 import com.example.twilio_chat_conversation.Interface.MessageInterface;
-import com.example.twilio_chat_conversation.Interface.TypingInterface;
 import com.example.twilio_chat_conversation.Utility.Methods;
 
 import java.util.List;
@@ -153,7 +152,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     }
   }
   @Override
-  public void onTypingUpdate(Map message) {
+  public void onTypingUpdate(boolean message) {
     /// Pass the message result back to the Flutter side
     if (this.typingEventSink != null) {
       this.typingEventSink.success(message);
