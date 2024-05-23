@@ -17,6 +17,8 @@ import com.twilio.conversations.User;
 import com.twilio.jwt.accesstoken.AccessToken;
 import com.twilio.jwt.accesstoken.ChatGrant;
 import com.twilio.util.ErrorInfo;
+import com.twilio.util.TwilioException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +50,10 @@ public class ConversationHandler {
         builder.grant(chatGrant);
         // Build the token
         AccessToken token = builder.build();
+
         return token.toJwt();
+
+
     }
     /// Create new conversation #
     public static void createConversation(String conversationName, String identity, MethodChannel.Result result) {
@@ -132,6 +137,7 @@ public class ConversationHandler {
                 result.join(new StatusListener() {
                     @Override
                     public void onSuccess() {
+
                     }
                     @Override
                     public void onError(ErrorInfo errorInfo) {
@@ -514,4 +520,48 @@ public class ConversationHandler {
             typingInterface.onTypingUpdate(isTyping);
         }
     }
+   static public void startTyping(String conversationSid) {
+
+        try {
+            conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
+                @Override
+                public void onSuccess(Conversation conversation) {
+                    conversation.typing();
+                    result.success(null);
+                    // Notify Flutter of typing event
+                }
+
+                @Override
+                public void onError(ErrorInfo errorInfo) {
+//                    result.error(new TwilioException(errorInfo.getCode(), errorInfo.getMessage()));
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            result.error(e);
+        }
+    }
+
+   static public void stopTyping(String conversationSid) {
+
+        try {
+            conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
+                @Override
+                public void onSuccess(Conversation conversation) {
+                    // Implement stop typing if needed
+                    conversation.typing();
+                    result.success(null);
+                    // Notify Flutter of stop typing event
+
+                }
+
+                @Override
+                public void onError(ErrorInfo errorInfo) {
+                    //result.error(new TwilioException(errorInfo.getCode(), errorInfo.getMessage()));
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            result.error(e);
+        }
+    }
+
 }

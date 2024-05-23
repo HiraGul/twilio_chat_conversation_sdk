@@ -16,5 +16,9 @@ public class Methods {
     public final static String subscribeToMessageUpdate = "subscribeToMessageUpdate";
     public final static String initializeConversationClient = "initializeConversationClient";
     public final static String updateAccessToken = "updateAccessToken";
+    public final static String typingStarts = "typingStarts";
+    public final static String typingStops = "typingStops";
+
+
 
 }

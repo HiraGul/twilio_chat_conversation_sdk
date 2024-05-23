@@ -157,4 +157,20 @@ class MethodChannelTwilioChatConversation
         {"conversationId": conversationId, "participantName": participantName});
     return result ?? "";
   }
+
+  @override
+  Future<String?> startTyping(
+      {required conversationId, required participantName}) async {
+    final String? result = await methodChannel.invokeMethod<String>(
+        'typingStarts', {"conversationId": conversationId});
+    return result ?? "";
+  }
+
+  @override
+  Future<String?> stopTyping(
+      {required conversationId, required participantName}) async {
+    final String? result = await methodChannel.invokeMethod<String>(
+        'typingStops', {"conversationId": conversationId});
+    return result ?? "";
+  }
 }

@@ -43,6 +43,8 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     typingEventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "twilio_chat_conversation/onTypingUpdate");
     typingEventChannel.setStreamHandler(this);
 
+
+
     ConversationHandler.flutterPluginBinding = flutterPluginBinding;
   }
 
@@ -96,9 +98,12 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
       case Methods.subscribeToMessageUpdate:
         ConversationHandler.subscribeToMessageUpdate(call.argument("conversationId"));
         break;
+      case Methods.typingStarts:
+        ConversationHandler.startTyping(call.argument("conversationId"));
+        break;
       // Get participants from the specific conversation #
-      case Methods.getParticipants:
-        ConversationHandler.getParticipants(call.argument("conversationId"),result);
+      case Methods.typingStops:
+        ConversationHandler.stopTyping(call.argument("conversationId"),result);
         break;
       case Methods.unSubscribeToMessageUpdate:
         ConversationHandler.unSubscribeToMessageUpdate(call.argument("conversationId"));
@@ -117,6 +122,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     eventChannel.setStreamHandler(null);
     tokenEventChannel.setStreamHandler(null);
     typingEventChannel.setStreamHandler(null);
+
   }
 
   @Override
@@ -155,6 +161,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   @Override
   public void onTypingUpdate(boolean message) {
     /// Pass the message result back to the Flutter side
+
     if (this.typingEventSink != null) {
       this.typingEventSink.success(message);
     }
