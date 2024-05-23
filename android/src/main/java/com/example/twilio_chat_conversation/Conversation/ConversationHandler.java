@@ -532,32 +532,14 @@ public class ConversationHandler {
 
                 @Override
                 public void onError(ErrorInfo errorInfo) {
-//                    result.error(new TwilioException(errorInfo.getCode(), errorInfo.getMessage()));
+//
                 }
             });
         } catch (IllegalArgumentException e) {
-            result.error(e);
+
         }
     }
 
-   static public void stopTyping(String conversationSid) {
 
-        try {
-            conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
-                @Override
-                public void onSuccess(Conversation conversation) {
-
-
-                }
-
-                @Override
-                public void onError(ErrorInfo errorInfo) {
-
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            result.error(e);
-        }
-    }
 
 }
