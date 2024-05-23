@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
 import 'twilio_chat_conversation_platform_interface.dart';
 
 /// An implementation of [TwilioChatConversationPlatform] that uses method channels.
@@ -153,6 +155,26 @@ class MethodChannelTwilioChatConversation
     final String? result = await methodChannel.invokeMethod<String>(
         'removeParticipant',
         {"conversationId": conversationId, "participantName": participantName});
+    return result ?? "";
+  }
+
+  @override
+  Future<String> subscribeToTypingUpdate(
+      {required String conversationId}) async {
+    // TODO: implement onMessageUpdated
+    //
+    final String? result = await methodChannel.invokeMethod(
+        'subscribeToTypingUpdate', {"conversationId": conversationId});
+    return result ?? "";
+  }
+
+  @override
+  Future<String> unSubscribeToTypingUpdate(
+      {required String conversationId}) async {
+    // TODO: implement onMessageUpdated
+    //
+    final String? result = await methodChannel.invokeMethod(
+        'unSubscribeToTypingUpdate', {"conversationId": conversationId});
     return result ?? "";
   }
 }

@@ -107,7 +107,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
       case Methods.subscribeToTypingUpdate:
         ConversationHandler.subscribeToTypingUpdate(call.argument("conversationId"),result);
       case Methods.unSubscribeToMessageUpdate:
-        ConversationHandler.subscribeToTypingUpdate(call.argument("conversationId"),result);
+        ConversationHandler.unSubscribeToTypingUpdate(call.argument("conversationId"),result);
         break;
       default:
         break;
