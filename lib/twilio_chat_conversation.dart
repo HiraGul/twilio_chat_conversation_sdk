@@ -15,8 +15,6 @@ class TwilioChatConversation {
       EventChannel('twilio_chat_conversation/onMessageUpdated');
   static const EventChannel _tokenEventChannel =
       EventChannel('twilio_chat_conversation/onTokenStatusChange');
-  static const EventChannel _typingEventChannel =
-      EventChannel('twilio_chat_conversation/onTypingUpdate');
   static final StreamController<Map> _messageUpdateController =
       StreamController<Map>.broadcast();
   static final StreamController<Map> _tokenStatusController =
