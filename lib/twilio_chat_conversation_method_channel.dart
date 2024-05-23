@@ -157,24 +157,4 @@ class MethodChannelTwilioChatConversation
         {"conversationId": conversationId, "participantName": participantName});
     return result ?? "";
   }
-
-  @override
-  Future<String> subscribeToTypingUpdate(
-      {required String conversationId}) async {
-    // TODO: implement onMessageUpdated
-    //
-    final String? result = await methodChannel.invokeMethod(
-        'subscribeToTypingUpdate', {"conversationId": conversationId});
-    return result ?? "";
-  }
-
-  @override
-  Future<String> unSubscribeToTypingUpdate(
-      {required String conversationId}) async {
-    // TODO: implement onMessageUpdated
-    //
-    final String? result = await methodChannel.invokeMethod(
-        'unSubscribeToTypingUpdate', {"conversationId": conversationId});
-    return result ?? "";
-  }
 }

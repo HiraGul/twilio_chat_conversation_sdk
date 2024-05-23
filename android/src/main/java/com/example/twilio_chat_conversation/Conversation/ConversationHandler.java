@@ -223,20 +223,13 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
-                        try {
-                            Map<String, Object> typingStarted = new HashMap<>();
-                            typingStarted.put("conversationSid", conversation.getSid());
-                            typingStarted.put("participantSid", participant.getSid());
-                            typingStarted.put("participantIdentity", participant.getIdentity());
-                            triggerTypingEvent(typingStarted);
-                        } catch (Exception e) {
-                            // Handle exception
-                        }
+                        updateTypingIndicator(participant, true);
 
                     }
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
+                        updateTypingIndicator(participant, false);
 
                     }
 
@@ -607,9 +600,8 @@ public class ConversationHandler {
             accessTokenInterface.onTokenStatusChange(status);
         }
     }
-    public static void triggerTypingEvent(Map<String, Object> typingEvent) {
-        if (typingInterface != null) {
-            typingInterface.onTypingUpdate(typingEvent);
-        }
+    // Define the method to update the typing indicator
+    static  private void updateTypingIndicator(Participant participant, boolean isTyping) {
+        System.out.print("INDICATOR"+isTyping);
     }
 }

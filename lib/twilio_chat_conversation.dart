@@ -15,18 +15,14 @@ class TwilioChatConversation {
       EventChannel('twilio_chat_conversation/onMessageUpdated');
   static const EventChannel _tokenEventChannel =
       EventChannel('twilio_chat_conversation/onTokenStatusChange');
-  static const EventChannel _typingEventChannel =
-      EventChannel('twilio_chat_conversation/onTypingUpdate');
+
   static final StreamController<Map> _messageUpdateController =
       StreamController<Map>.broadcast();
   static final StreamController<Map> _tokenStatusController =
       StreamController<Map>.broadcast();
-  static final StreamController<Map> _typingStartedController =
-      StreamController<Map>.broadcast();
 
   /// Stream for receiving incoming messages.
   Stream<Map> get onMessageReceived => _messageUpdateController.stream;
-  Stream<Map> get onTypingStarted => _typingStartedController.stream;
 
   Future<String?> getPlatformVersion() {
     return TwilioChatConversationPlatform.instance.getPlatformVersion();
@@ -190,20 +186,6 @@ class TwilioChatConversation {
   Future<Map?> updateAccessToken({required String accessToken}) {
     return TwilioChatConversationPlatform.instance
         .updateAccessToken(accessToken: accessToken);
-  }
-
-  /// Subscribes to message update events for a specific conversation.
-  void subscribeToTypingUpdate({required String conversationSid}) async {
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      if (event != null) {
-        if (event["participantSid"] != null &&
-            event["participantIdentity"] != null) {
-          _typingStartedController.add(event);
-        }
-      }
-    });
   }
 
   /// Unsubscribes from message update events for a specific conversation.
