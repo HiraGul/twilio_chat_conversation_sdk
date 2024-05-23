@@ -127,6 +127,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     ConversationHandler conversationHandler = new ConversationHandler();
     conversationHandler.setListener(this);
     conversationHandler.setTokenListener(this);
+
   }
 
   @Override
