@@ -223,12 +223,14 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
+                        System.out.print("TYPING STARTS"+isTyping);
                         updateTypingIndicator(participant, true);
 
                     }
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
+                        System.out.print("TYPING ENDS"+isTyping);
                         updateTypingIndicator(participant, false);
 
                     }
