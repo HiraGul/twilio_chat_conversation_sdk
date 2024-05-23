@@ -494,6 +494,7 @@ public class ConversationHandler {
 
     public void setListener(MessageInterface listener) {
         ConversationHandler.messageInterface = listener;
+
     }
     public void setTokenListener(AccessTokenInterface listener) {
         ConversationHandler.accessTokenInterface = listener;
