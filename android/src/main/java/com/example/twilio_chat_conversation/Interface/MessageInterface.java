@@ -3,6 +3,5 @@ import java.util.Map;
 
 public interface MessageInterface {
     default void onMessageUpdate(Map message) {}
-    default void onTypingUpdate(Map typingEvent) {
-    }
+
 }

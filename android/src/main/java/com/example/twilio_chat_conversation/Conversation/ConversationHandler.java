@@ -227,7 +227,7 @@ public class ConversationHandler {
                             typingStarted.put("conversationSid", conversation.getSid());
                             typingStarted.put("participantSid", participant.getSid());
                             typingStarted.put("participantIdentity", participant.getIdentity());
-                            triggerTypingEvent(typingStarted);
+
                         } catch (Exception e) {
                             // Handle exception
                         }
@@ -514,9 +514,5 @@ public class ConversationHandler {
             accessTokenInterface.onTokenStatusChange(status);
         }
     }
-    public static void triggerTypingEvent(Map<String, Object> typingEvent) {
-        if (messageInterface != null) {
-            messageInterface.onTypingUpdate(typingEvent);
-        }
-    }
+
 }

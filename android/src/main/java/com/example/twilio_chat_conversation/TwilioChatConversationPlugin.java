@@ -26,10 +26,9 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   private MethodChannel channel;
   private EventChannel eventChannel;
   private EventChannel tokenEventChannel;
-  private EventChannel typingEventChannel;
   private EventChannel.EventSink eventSink;
   private EventChannel.EventSink tokenEventSink;
-  private EventChannel.EventSink typingEventSink;
+
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -39,8 +38,7 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     eventChannel.setStreamHandler(this);
     tokenEventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "twilio_chat_conversation/onTokenStatusChange");
     tokenEventChannel.setStreamHandler(this);
-    typingEventChannel = new EventChannel(flutterPluginBinding.getBinaryMessenger(), "twilio_chat_conversation/onTypingUpdate");
-    typingEventChannel.setStreamHandler(this);
+
 
     ConversationHandler.flutterPluginBinding = flutterPluginBinding;
   }
@@ -115,14 +113,13 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     channel.setMethodCallHandler(null);
     eventChannel.setStreamHandler(null);
     tokenEventChannel.setStreamHandler(null);
-    typingEventChannel.setStreamHandler(null);
+
   }
 
   @Override
   public void onListen(Object arguments, EventSink events) {
     this.eventSink = events;
     this.tokenEventSink = events;
-    this.typingEventSink=events;
     ConversationHandler conversationHandler = new ConversationHandler();
     conversationHandler.setListener(this);
     conversationHandler.setTokenListener(this);
@@ -132,7 +129,6 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
   public void onCancel(Object arguments) {
     eventSink = null;
     tokenEventSink = null;
-    typingEventSink=null;
   }
 
   @Override
@@ -148,13 +144,6 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
     /// Pass the message result back to the Flutter side
     if (this.tokenEventSink != null) {
       this.tokenEventSink.success(message);
-    }
-  }
-  @Override
-  public void onTypingUpdate(Map message) {
-    /// Pass the message result back to the Flutter side
-    if (this.typingEventSink != null) {
-      this.typingEventSink.success(message);
     }
   }
 }
