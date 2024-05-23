@@ -507,8 +507,8 @@ public class ConversationHandler {
     // Define the method to update the typing indicator
     static  private void updateTypingIndicator(Participant participant, boolean isTyping) {
         System.out.print("INDICATOR"+isTyping);
-        if (accessTokenInterface != null) {
-            accessTokenInterface.onTokenStatusChange(status);
+        if (typingInterface != null) {
+            typingInterface.onTypingUpdate(isTyping);
         }
     }
 }
