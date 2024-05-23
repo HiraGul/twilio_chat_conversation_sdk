@@ -177,6 +177,14 @@ class TwilioChatConversation {
         }
       }
     });
+
+    _typingEventChannel
+        .receiveBroadcastStream(conversationSid)
+        .listen((dynamic event) {
+      if (event != null) {
+        _typingStartedController.add(event);
+      }
+    });
   }
 
   /// Unsubscribes from message update events for a specific conversation.
@@ -189,20 +197,6 @@ class TwilioChatConversation {
   Future<Map?> updateAccessToken({required String accessToken}) {
     return TwilioChatConversationPlatform.instance
         .updateAccessToken(accessToken: accessToken);
-  }
-
-  /// Subscribes to message update events for a specific conversation.
-  void subscribeToTypingUpdate({required String conversationSid}) async {
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      if (event != null) {
-        if (event["participantSid"] != null &&
-            event["participantIdentity"] != null) {
-          _typingStartedController.add(event);
-        }
-      }
-    });
   }
 
   /// Unsubscribes from message update events for a specific conversation.
