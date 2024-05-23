@@ -190,7 +190,7 @@ public class ConversationHandler {
                             messageMap.put("body",message.getBody());
                             messageMap.put("attributes",message.getAttributes().toString());
                             messageMap.put("dateCreated",message.getDateCreated());
-                            //System.out.println("messageMap-"+message.getDateCreated());
+                            System.out.println("MESSAGE ADDED-"+message);
                             triggerEvent(messageMap);
                         }catch (Exception e){
                             //System.out.println("Exception-"+e.getMessage());
