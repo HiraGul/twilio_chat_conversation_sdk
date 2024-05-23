@@ -166,28 +166,30 @@ class TwilioChatConversation {
 
   /// Subscribes to message update events for a specific conversation.
   void subscribeToMessageUpdate({required String conversationSid}) async {
-    // Subscribe to message updates for the specified conversation
     TwilioChatConversationPlatform.instance
         .subscribeToMessageUpdate(conversationId: conversationSid);
 
-    // Listen to message updates and add them to the message update controller
     _messageEventChannel
         .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      if (event != null && event is Map<String, dynamic>) {
-        if (event.containsKey("author") && event.containsKey("body")) {
-          _messageUpdateController.add(event);
+        .listen((dynamic message) {
+          print('contr 1');
+      print("adding data to above");
+      if (message != null) {
+        if (message["author"] != null && message["body"] != null) {
+          _messageUpdateController.add(message);
         }
       }
+      print(_messageUpdateController);
     });
-
-    // Listen to typing events and add them to the typing started controller
     _typingEventChannel
         .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      if (event != null && event is Map<String, dynamic>) {
-        _typingStartedController.add(event);
+        .listen((dynamic message) {
+      print("adding data to above");
+      if (message != null) {
+        _typingStartedController.add(message);
       }
+      print('cont 2');
+      print(_messageUpdateController);
     });
   }
 
