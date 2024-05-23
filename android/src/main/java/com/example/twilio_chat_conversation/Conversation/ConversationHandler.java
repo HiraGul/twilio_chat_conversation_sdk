@@ -223,6 +223,15 @@ public class ConversationHandler {
 
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
+                        try {
+                            Map<String, Object> typingStarted = new HashMap<>();
+                            typingStarted.put("conversationSid", conversation.getSid());
+                            typingStarted.put("participantSid", participant.getSid());
+                            typingStarted.put("participantIdentity", participant.getIdentity());
+                            triggerTypingEvent(typingStarted);
+                        } catch (Exception e) {
+                            // Handle exception
+                        }
 
                     }
 
