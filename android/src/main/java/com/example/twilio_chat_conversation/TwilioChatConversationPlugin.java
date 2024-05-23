@@ -102,9 +102,6 @@ public class TwilioChatConversationPlugin implements FlutterPlugin, MethodCallHa
         ConversationHandler.startTyping(call.argument("conversationId"));
         break;
       // Get participants from the specific conversation #
-      case Methods.typingStops:
-        ConversationHandler.stopTyping(call.argument("conversationId"),result);
-        break;
       case Methods.unSubscribeToMessageUpdate:
         ConversationHandler.unSubscribeToMessageUpdate(call.argument("conversationId"));
         break;
