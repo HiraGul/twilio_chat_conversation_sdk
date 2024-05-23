@@ -527,8 +527,7 @@ public class ConversationHandler {
                 @Override
                 public void onSuccess(Conversation conversation) {
                     conversation.typing();
-                    result.success(null);
-                    // Notify Flutter of typing event
+
                 }
 
                 @Override
@@ -547,16 +546,13 @@ public class ConversationHandler {
             conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
                 @Override
                 public void onSuccess(Conversation conversation) {
-                    // Implement stop typing if needed
-                    conversation.typing();
-                    result.success(null);
-                    // Notify Flutter of stop typing event
+
 
                 }
 
                 @Override
                 public void onError(ErrorInfo errorInfo) {
-                    //result.error(new TwilioException(errorInfo.getCode(), errorInfo.getMessage()));
+
                 }
             });
         } catch (IllegalArgumentException e) {
