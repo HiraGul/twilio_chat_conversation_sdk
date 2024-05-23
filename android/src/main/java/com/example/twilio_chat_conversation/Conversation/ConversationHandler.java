@@ -2,6 +2,7 @@ package com.example.twilio_chat_conversation.Conversation;
 
 import com.example.twilio_chat_conversation.Interface.AccessTokenInterface;
 import com.example.twilio_chat_conversation.Interface.MessageInterface;
+import com.example.twilio_chat_conversation.Interface.TypingInterface;
 import com.example.twilio_chat_conversation.Utility.Strings;
 import com.twilio.conversations.Attributes;
 import com.twilio.conversations.CallbackListener;
