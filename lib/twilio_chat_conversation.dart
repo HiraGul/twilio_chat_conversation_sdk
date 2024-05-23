@@ -21,14 +21,9 @@ class TwilioChatConversation {
       StreamController<Map>.broadcast();
   static final StreamController<Map> _tokenStatusController =
       StreamController<Map>.broadcast();
-  static final StreamController<Map> _typingStartedController =
-      StreamController<Map>.broadcast();
-  // static final StreamController<Map> _typingEndedController =
-  //     StreamController<Map>.broadcast();
 
   /// Stream for receiving incoming messages.
   Stream<Map> get onMessageReceived => _messageUpdateController.stream;
-  Stream<Map> get onTypingStarted => _typingStartedController.stream;
   //Stream<Map> get onTypingEnded => _typingEndedController.stream;
   Future<String?> getPlatformVersion() {
     return TwilioChatConversationPlatform.instance.getPlatformVersion();
@@ -170,25 +165,12 @@ class TwilioChatConversation {
   void subscribeToMessageUpdate({required String conversationSid}) async {
     TwilioChatConversationPlatform.instance
         .subscribeToMessageUpdate(conversationId: conversationSid);
-    print("LISTENER SUBSCRIBE MESSAGE UPDATE");
     _messageEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
-      print("MESSAGE EVENT");
       if (message != null) {
         if (message["author"] != null && message["body"] != null) {
           _messageUpdateController.add(message);
-        }
-      }
-    });
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic event) {
-      print("TYPING EVENT $event");
-      if (event != null) {
-        if (event["participantSid"] != null &&
-            event["participantIdentity"] != null) {
-          _typingStartedController.add(event);
         }
       }
     });
