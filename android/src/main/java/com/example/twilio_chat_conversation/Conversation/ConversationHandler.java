@@ -493,13 +493,16 @@ public class ConversationHandler {
     }
 
     public void setListener(MessageInterface listener) {
+        System.out.println("Listener 1");
         ConversationHandler.messageInterface = listener;
 
     }
     public void setTokenListener(AccessTokenInterface listener) {
+        System.out.println("Listener 2");
         ConversationHandler.accessTokenInterface = listener;
     }
     public void setTypingListener(TypingInterface listener) {
+        System.out.println("Listener 3");
         ConversationHandler.typingInterface = listener;
     }
 
