@@ -194,8 +194,6 @@ class TwilioChatConversation {
 
   /// Subscribes to message update events for a specific conversation.
   void subscribeToTypingUpdate({required String conversationSid}) async {
-    TwilioChatConversationPlatform.instance
-        .subscribeToTypingUpdate(conversationId: conversationSid);
     _typingEventChannel
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic event) {
@@ -209,10 +207,6 @@ class TwilioChatConversation {
   }
 
   /// Unsubscribes from message update events for a specific conversation.
-  void unSubscribeToTypingUpdate({required String conversationSid}) {
-    TwilioChatConversationPlatform.instance
-        .unSubscribeToTypingUpdate(conversationId: conversationSid);
-  }
 
   /// Stream for receiving token status changes.
   Stream<Map> get onTokenStatusChange {
