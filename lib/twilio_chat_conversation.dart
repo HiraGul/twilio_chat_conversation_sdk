@@ -181,7 +181,7 @@ class TwilioChatConversation {
         .receiveBroadcastStream(conversationSid)
         .listen((dynamic message) {
       if (message != null) {
-        _messageUpdateController.add(message);
+        _typingStartedController.add(message);
       }
     });
   }
