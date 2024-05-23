@@ -174,87 +174,90 @@ public class ConversationHandler {
     }
     /// Subscribe To Message Update #
     public static void subscribeToMessageUpdate(String conversationId){
-        conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
-
+        System.out.println("subscribeToMessageUpdate called with conversationId: " + conversationId);
+        conversationClient.getConversation(conversationId, new CallbackListener<Conversation>(){
             @Override
             public void onSuccess(Conversation result) {
+                System.out.println("Successfully retrieved conversation: " + result.getSid());
 
                 // Join the conversation with the given participant identity
                 result.addListener(new ConversationListener() {
                     @Override
                     public void onMessageAdded(Message message) {
                         try {
+                            System.out.println("Message added: " + message.getSid());
                             Map<String, Object> messageMap = new HashMap<>();
-                            messageMap.put("sid",message.getSid());
-                            messageMap.put("author",message.getAuthor());
-                            messageMap.put("body",message.getBody());
-                            messageMap.put("attributes",message.getAttributes().toString());
-                            messageMap.put("dateCreated",message.getDateCreated());
-                            //System.out.println("messageMap-"+message.getDateCreated());
+                            messageMap.put("sid", message.getSid());
+                            messageMap.put("author", message.getAuthor());
+                            messageMap.put("body", message.getBody());
+                            messageMap.put("attributes", message.getAttributes().toString());
+                            messageMap.put("dateCreated", message.getDateCreated());
+                            System.out.println("messageMap: " + messageMap);
                             triggerEvent(messageMap);
-                        }catch (Exception e){
-                            //System.out.println("Exception-"+e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Exception in onMessageAdded: " + e.getMessage());
                         }
                     }
 
                     @Override
                     public void onMessageUpdated(Message message, Message.UpdateReason reason) {
-                        //System.out.println("onMessageUpdated->"+message.toString());
-                        //System.out.println("reason->"+reason.toString());
+                        System.out.println("Message updated: " + message.getSid() + ", reason: " + reason);
                     }
 
                     @Override
                     public void onMessageDeleted(Message message) {
-                        //System.out.println("onMessageDeleted->"+message.toString());
+                        System.out.println("Message deleted: " + message.getSid());
                     }
 
                     @Override
                     public void onParticipantAdded(Participant participant) {
+                        System.out.println("Participant added: " + participant.getSid());
                     }
 
                     @Override
                     public void onParticipantUpdated(Participant participant, Participant.UpdateReason reason) {
+                        System.out.println("Participant updated: " + participant.getSid() + ", reason: " + reason);
                     }
-
 
                     @Override
                     public void onParticipantDeleted(Participant participant) {
+                        System.out.println("Participant deleted: " + participant.getSid());
                     }
 
                     @Override
                     public void onTypingStarted(Conversation conversation, Participant participant) {
                         try {
+                            System.out.println("Typing started by participant: " + participant.getSid());
                             Map<String, Object> typingStarted = new HashMap<>();
                             typingStarted.put("conversationSid", conversation.getSid());
                             typingStarted.put("participantSid", participant.getSid());
                             typingStarted.put("participantIdentity", participant.getIdentity());
                             triggerTypingEvent(typingStarted);
                         } catch (Exception e) {
-                            // Handle exception
+                            System.out.println("Exception in onTypingStarted: " + e.getMessage());
                         }
-
                     }
 
                     @Override
                     public void onTypingEnded(Conversation conversation, Participant participant) {
-
+                        System.out.println("Typing ended by participant: " + participant.getSid());
                     }
 
                     @Override
                     public void onSynchronizationChanged(Conversation conversation) {
-                        System.out.println("conversation onSynchronizationChanged->"+conversation.getSynchronizationStatus().toString());
+                        System.out.println("Synchronization changed for conversation: " + conversation.getSid() + ", status: " + conversation.getSynchronizationStatus().toString());
                     }
                 });
             }
 
             @Override
             public void onError(ErrorInfo errorInfo) {
-                //System.out.println("client12-" + errorInfo.getStatus()+"-"+errorInfo.getCode()+"-"+errorInfo.getMessage()+"-"+errorInfo.getDescription()+"-"+errorInfo.getReason());
-
+                System.out.println("Error retrieving conversation: " + errorInfo.getMessage() + " (status: " + errorInfo.getStatus() + ", code: " + errorInfo.getCode() + ", description: " + errorInfo.getDescription() + ")");
                 CallbackListener.super.onError(errorInfo);
             }
         });
     }
+
     /// Unsubscribe To Message Update #
     public static void unSubscribeToMessageUpdate(String conversationId){
         conversationClient.getConversation(conversationId,new CallbackListener<Conversation>(){
