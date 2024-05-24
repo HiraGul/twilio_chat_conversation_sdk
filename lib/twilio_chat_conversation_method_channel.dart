@@ -159,16 +159,18 @@ class MethodChannelTwilioChatConversation
   }
 
   @override
-  Future<String?> startTyping(
-      {required conversationId, required participantName}) async {
+  Future<String?> startTyping({
+    required conversationId,
+  }) async {
     final String? result = await methodChannel.invokeMethod<String>(
         'typingStarts', {"conversationId": conversationId});
     return result ?? "";
   }
 
   @override
-  Future<String?> stopTyping(
-      {required conversationId, required participantName}) async {
+  Future<String?> stopTyping({
+    required conversationId,
+  }) async {
     final String? result = await methodChannel.invokeMethod<String>(
         'typingStops', {"conversationId": conversationId});
     return result ?? "";

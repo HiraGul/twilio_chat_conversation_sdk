@@ -199,6 +199,16 @@ class TwilioChatConversation {
         .updateAccessToken(accessToken: accessToken);
   }
 
+  void typingStarts({required String conversationSid}) {
+    TwilioChatConversationPlatform.instance
+        .startTyping(conversationId: conversationSid);
+  }
+
+  void typingStops({required String conversationSid}) {
+    TwilioChatConversationPlatform.instance
+        .stopTyping(conversationId: conversationSid);
+  }
+
   /// Unsubscribes from message update events for a specific conversation.
 
   /// Stream for receiving token status changes.

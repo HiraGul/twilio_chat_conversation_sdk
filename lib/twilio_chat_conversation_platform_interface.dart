@@ -102,13 +102,11 @@ abstract class TwilioChatConversationPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> startTyping(
-      {required conversationId, required participantName}) {
+  Future<String?> startTyping({required conversationId}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> stopTyping(
-      {required conversationId, required participantName}) {
+  Future<String?> stopTyping({required conversationId}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

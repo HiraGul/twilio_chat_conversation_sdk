@@ -526,6 +526,7 @@ public class ConversationHandler {
             conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
                 @Override
                 public void onSuccess(Conversation conversation) {
+                    System.out.print("INDICATOR IS");
                     conversation.typing();
 
                 }
