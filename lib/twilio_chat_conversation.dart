@@ -179,13 +179,13 @@ class TwilioChatConversation {
       }
       print(_messageUpdateController.stream);
     });
-    _typingEventChannel
-        .receiveBroadcastStream(conversationSid)
-        .listen((dynamic message) {
-      if (message != null) {
-        _typingStartedController.add(message);
-      }
-    });
+    // _typingEventChannel
+    //     .receiveBroadcastStream(conversationSid)
+    //     .listen((dynamic message) {
+    //   if (message != null) {
+    //     _typingStartedController.add(message);
+    //   }
+    // });
   }
 
   /// Unsubscribes from message update events for a specific conversation.
