@@ -515,7 +515,7 @@ public class ConversationHandler {
     }
     // Define the method to update the typing indicator
     static  private void updateTypingIndicator(Participant participant, boolean isTyping) {
-        System.out.print("INDICATOR"+isTyping);
+        System.out.print("INDICATOR"+ isTyping);
         if (typingInterface != null) {
             typingInterface.onTypingUpdate(isTyping);
         }
@@ -526,7 +526,7 @@ public class ConversationHandler {
             conversationClient.getConversation(conversationSid, new CallbackListener<Conversation>() {
                 @Override
                 public void onSuccess(Conversation conversation) {
-                    System.out.print("INDICATOR IS");
+                    System.out.print("INDICATOR PROGRESS");
                     conversation.typing();
 
                 }
